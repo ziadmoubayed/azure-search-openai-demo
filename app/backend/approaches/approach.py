@@ -10,6 +10,7 @@ from typing import (
     Optional,
     TypedDict,
     cast,
+    Dict,
 )
 from urllib.parse import urljoin
 
