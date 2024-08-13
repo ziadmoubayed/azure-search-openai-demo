@@ -26,6 +26,7 @@ from openai.types.chat import ChatCompletionMessageParam
 
 from core.authentication import AuthenticationHelper
 from text import nonewlines
+import httpx
 
 
 @dataclass
@@ -126,6 +127,64 @@ class Approach(ABC):
         if security_filter:
             filters.append(security_filter)
         return None if len(filters) == 0 else " and ".join(filters)
+    
+    async def call_perplexity_api(self, text: str) -> Dict[str, Any]:
+        """ Example response:
+        {
+            "id": "97726e90-f221-4d0a-9523-723ef079f7e3",
+            "model": "llama-3.1-sonar-small-128k-online",
+            "created": 1723574375,
+            "usage": {
+                "prompt_tokens": 14,
+                "completion_tokens": 22,
+                "total_tokens": 36
+            },
+            "object": "chat.completion",
+            "choices": [
+                {
+                "index": 0,
+                "finish_reason": "stop",
+                "message": {
+                    "role": "assistant",
+                    "content": "There are approximately 100 to 400 billion stars in the Milky Way galaxy."
+                },
+                "delta": {
+                    "role": "assistant",
+                    "content": ""
+                }
+                }
+            ]
+            }
+        """
+        url = "https://api.perplexity.ai/chat/completions"
+        headers = {
+            "Authorization": "Bearer " + os.environ.get("PERPLEXITY_API_KEY"),
+            "accept": "application/json",
+            "content-type": "application/json"
+        }
+        payload = {
+            "model": os.environ.get("PERPLEXITY_API_MODEL", "llama-3.1-sonar-small-128k-online"),
+            "messages": [
+                {
+                    "role": "system",
+                    "content": "Be precise and concise."
+                },
+                {
+                    "role": "user",
+                    "content": text
+                }
+            ]
+        }
+        try:
+            async with httpx.AsyncClient() as client:
+                response = await client.post(url, headers=headers, json=payload)
+                response.raise_for_status()
+                return response.json().get("choices")[0].get("message", {}).get("content", "")
+        except Exception as e:
+            # Handle any other exceptions
+            print(f"An unexpected error occurred: {e}")
+            return {"error": "An unexpected error occurred"}
+
 
     async def search(
         self,

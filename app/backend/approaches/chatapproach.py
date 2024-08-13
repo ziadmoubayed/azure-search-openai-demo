@@ -93,6 +93,10 @@ class ChatApproach(Approach, ABC):
         chat_completion_response: ChatCompletion = await chat_coroutine
         content = chat_completion_response.choices[0].message.content
         role = chat_completion_response.choices[0].message.role
+        if overrides.get("perplexity_enabled") and "sorry I cannot help" in content:
+            # todo - better check for no answer
+            content = self.call_perplexity_api(messages, overrides, auth_claims)
+
         if overrides.get("suggest_followup_questions"):
             content, followup_questions = self.extract_followup_questions(content)
             extra_info["followup_questions"] = followup_questions
