@@ -177,10 +177,11 @@ class Approach(ABC):
             ]
         }
         try:
-            async with httpx.AsyncClient() as client:
-                response = await client.post(url, headers=headers, json=payload)
-                response.raise_for_status()
-                return response.json().get("choices")[0].get("message", {}).get("content", "")
+            async with aiohttp.ClientSession() as session:
+                async with session.post(url, headers=headers, json=payload) as response:
+                    response.raise_for_status()
+                    response_json = await response.json()
+                    return response_json.get("choices")[0].get("message", {}).get("content", "")
         except Exception as e:
             # Handle any other exceptions
             print(f"An unexpected error occurred: {e}")

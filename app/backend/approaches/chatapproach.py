@@ -95,7 +95,7 @@ class ChatApproach(Approach, ABC):
         role = chat_completion_response.choices[0].message.role
         if overrides.get("perplexity_enabled") and "sorry I cannot help" in content:
             # todo - better check for no answer
-            content = self.call_perplexity_api(messages, overrides, auth_claims)
+            content = await self.call_perplexity_api(messages[-1]["content"]) # pick the last message as the user query
 
         if overrides.get("suggest_followup_questions"):
             content, followup_questions = self.extract_followup_questions(content)
