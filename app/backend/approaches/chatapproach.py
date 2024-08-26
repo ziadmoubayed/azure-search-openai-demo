@@ -101,7 +101,10 @@ class ChatApproach(Approach, ABC):
         )
         if check_response_for_no_answer(answer):
             answer = await self.call_perplexity_api(user_query)
-            all_completetions = [{"delta": {"content": answer, "role": "assistant"}}]
+            all_completetions = [
+                {"delta": {"content": "Perplexity:\n", "role": "assistant"}},
+                {"delta": {"content": answer, "role": "assistant"}},
+            ]
 
         for completion in all_completetions:
             yield completion

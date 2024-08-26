@@ -159,13 +159,13 @@ class Approach(ABC):
         """
         url = "https://api.perplexity.ai/chat/completions"
         headers = {
-            "Authorization": "Bearer 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",
-            # + os.environ.get("PERPLEXITY_API_KEY"),
+            "Authorization": "Bearer " + os.environ.get("PERPLEXITY_API_KEY"),
             "accept": "application/json",
             "content-type": "application/json",
         }
+        #
         payload = {
-            "model": os.environ.get("PERPLEXITY_API_MODEL", "llama-3.1-sonar-small-128k-online"),
+            "model": os.environ.get("PERPLEXITY_API_MODEL"),
             "messages": [{"role": "system", "content": "Be precise and concise."}, {"role": "user", "content": text}],
         }
         try:
