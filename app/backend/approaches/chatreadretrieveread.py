@@ -53,7 +53,7 @@ class ChatReadRetrieveReadApproach(ChatApproach):
         self.query_speller = query_speller
         self.chatgpt_token_limit = get_token_limit(chatgpt_model)
 
-     @property
+    @property
     def system_message_chat_conversation(self):
         return """You are an intelligent Knowledge base focusing on AI, data centers, security, technology trends, ESG and supply chain.. Be brief in your answers. Be brief in your answers.
         Answer ONLY with the facts listed in the list of sources below. If there isn't enough information below, say you don't know. Do not generate answers that don't use the sources below. If asking a clarifying question to the user would help, ask the question.

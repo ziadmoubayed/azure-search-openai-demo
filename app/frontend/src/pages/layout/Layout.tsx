@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useRef, RefObject } from "react";
-import { Outlet, NavLink, Link } from "react-router-dom";
+import { RefObject, useEffect, useRef, useState } from "react";
+import { Link, NavLink, Outlet } from "react-router-dom";
 
 import styles from "./Layout.module.css";
 
 import { useLogin } from "../../authConfig";
 
-import { LoginButton } from "../../components/LoginButton";
 import { IconButton } from "@fluentui/react";
+import { LoginButton } from "../../components/LoginButton";
 
 const Layout = () => {
     const [menuOpen, setMenuOpen] = useState(false);
@@ -38,7 +38,7 @@ const Layout = () => {
             <header className={styles.header} role={"banner"}>
                 <div className={styles.headerContainer} ref={menuRef}>
                     <Link to="/" className={styles.headerTitleContainer}>
-                        <h3 className={styles.headerTitle}>AI Knowledge Base/h3>
+                        <h3 className={styles.headerTitle}>AI Knowledge Base</h3>
                     </Link>
                     <nav>
                         <ul className={`${styles.headerNavList} ${menuOpen ? styles.show : ""}`}>
