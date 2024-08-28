@@ -1,0 +1,22 @@
+# fly.toml app configuration file generated for knowledge-base on 2024-08-28T21:28:55+02:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'knowledge-base'
+primary_region = 'ewr'
+
+[build]
+
+[http_service]
+  internal_port = 50505
+  force_https = true
+  auto_stop_machines = 'stop'
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
+
+[[vm]]
+  memory = '1gb'
+  cpu_kind = 'shared'
+  cpus = 1
